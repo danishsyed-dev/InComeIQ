@@ -1,0 +1,150 @@
+"""
+Feature configuration — column names, types, and label-encoding maps.
+
+The Adult Census dataset has categorical features that are label-encoded
+as integers. This file maps those integer codes back to human-readable
+labels for the web form dropdowns.
+"""
+
+# ── Feature List (all treated as numerical after encoding) ────────────────
+NUMERICAL_FEATURES = [
+    "age",
+    "workclass",
+    "education_num",
+    "marital_status",
+    "occupation",
+    "relationship",
+    "race",
+    "sex",
+    "capital_gain",
+    "capital_loss",
+    "hours_per_week",
+    "native_country",
+]
+
+# ── Label Encoding Maps (integer → human-readable) ───────────────────────
+# These maps are used by the HTML form dropdowns.
+# The keys are the encoded integer values stored in the dataset.
+
+WORKCLASS_MAP = {
+    0: "Federal-gov",
+    1: "Local-gov",
+    2: "Never-worked",
+    3: "Private",
+    4: "Self-emp-inc",
+    5: "Self-emp-not-inc",
+    6: "State-gov",
+    7: "Without-pay",
+}
+
+EDUCATION_MAP = {
+    1: "Preschool",
+    2: "1st-4th",
+    3: "5th-6th",
+    4: "7th-8th",
+    5: "9th",
+    6: "10th",
+    7: "11th",
+    8: "12th",
+    9: "HS-grad",
+    10: "Some-college",
+    11: "Assoc-voc",
+    12: "Assoc-acdm",
+    13: "Bachelors",
+    14: "Masters",
+    15: "Prof-school",
+    16: "Doctorate",
+}
+
+MARITAL_STATUS_MAP = {
+    0: "Divorced",
+    1: "Married-AF-spouse",
+    2: "Married-civ-spouse",
+    3: "Married-spouse-absent",
+    4: "Never-married",
+    5: "Separated",
+    6: "Widowed",
+}
+
+OCCUPATION_MAP = {
+    0: "Adm-clerical",
+    1: "Armed-Forces",
+    2: "Craft-repair",
+    3: "Exec-managerial",
+    4: "Farming-fishing",
+    5: "Handlers-cleaners",
+    6: "Machine-op-inspct",
+    7: "Other-service",
+    8: "Priv-house-serv",
+    9: "Prof-specialty",
+    10: "Protective-serv",
+    11: "Sales",
+    12: "Tech-support",
+    13: "Transport-moving",
+}
+
+RELATIONSHIP_MAP = {
+    0: "Husband",
+    1: "Not-in-family",
+    2: "Other-relative",
+    3: "Own-child",
+    4: "Unmarried",
+    5: "Wife",
+}
+
+RACE_MAP = {
+    0: "Amer-Indian-Eskimo",
+    1: "Asian-Pac-Islander",
+    2: "Black",
+    3: "Other",
+    4: "White",
+}
+
+SEX_MAP = {
+    0: "Female",
+    1: "Male",
+}
+
+NATIVE_COUNTRY_MAP = {
+    0: "Cambodia",
+    1: "Canada",
+    2: "China",
+    3: "Columbia",
+    4: "Cuba",
+    5: "Dominican-Republic",
+    6: "Ecuador",
+    7: "El-Salvador",
+    8: "England",
+    9: "France",
+    10: "Germany",
+    11: "Greece",
+    12: "Guatemala",
+    13: "Haiti",
+    14: "Holand-Netherlands",
+    15: "Honduras",
+    16: "Hong",
+    17: "Hungary",
+    18: "India",
+    19: "Iran",
+    20: "Ireland",
+    21: "Italy",
+    22: "Jamaica",
+    23: "Japan",
+    24: "Laos",
+    25: "Mexico",
+    26: "Nicaragua",
+    27: "Outlying-US(Guam-USVI-etc)",
+    28: "Peru",
+    29: "Philippines",
+    30: "Poland",
+    31: "Portugal",
+    32: "Puerto-Rico",
+    33: "Scotland",
+    34: "South",
+    35: "Taiwan",
+    36: "Thailand",
+    37: "Trinadad&Tobago",
+    38: "United-States",
+    39: "Vietnam",
+    40: "Yugoslavia",
+}

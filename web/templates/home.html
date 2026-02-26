@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+{% block title %}ML Income Predictor — Predict Your Income{% endblock %}
+
+{% block content %}
+<div class="card">
+    {% if error %}
+    <div class="alert-error">
+        ⚠️ {{ error }}
+    </div>
+    {% endif %}
+
+    <form action="/" method="POST">
+        <div class="form-grid">
+            <!-- Age -->
+            <div class="form-group">
+                <label for="age">Age</label>
+                <input type="text" id="age" name="age" placeholder="e.g. 35" required>
+            </div>
+
+            <!-- Workclass -->
+            <div class="form-group">
+                <label for="workclass">Employment Type</label>
+                <select id="workclass" name="workclass">
+                    <option value="3">Private</option>
+                    <option value="6">State Government</option>
+                    <option value="0">Federal Government</option>
+                    <option value="1">Local Government</option>
+                    <option value="4">Self-employed (Inc)</option>
+                    <option value="5">Self-employed (Not Inc)</option>
+                    <option value="7">Without Pay</option>
+                    <option value="2">Never Worked</option>
+                </select>
+            </div>
+
+            <!-- Education -->
+            <div class="form-group">
+                <label for="education_num">Education Level</label>
+                <select id="education_num" name="education_num">
+                    <option value="13">Bachelors</option>
+                    <option value="14">Masters</option>
+                    <option value="16">Doctorate</option>
+                    <option value="15">Prof School</option>
+                    <option value="12">Associate (Academic)</option>
+                    <option value="11">Associate (Vocational)</option>
+                    <option value="10">Some College</option>
+                    <option value="9">High School Grad</option>
+                    <option value="8">12th Grade</option>
+                    <option value="7">11th Grade</option>
+                    <option value="6">10th Grade</option>
+                    <option value="5">9th Grade</option>
+                    <option value="4">7th-8th Grade</option>
+                    <option value="3">5th-6th Grade</option>
+                    <option value="2">1st-4th Grade</option>
+                    <option value="1">Preschool</option>
+                </select>
+            </div>
+
+            <!-- Marital Status -->
+            <div class="form-group">
+                <label for="marital_status">Marital Status</label>
+                <select id="marital_status" name="marital_status">
+                    <option value="4">Never Married</option>
+                    <option value="2">Married (Civilian)</option>
+                    <option value="0">Divorced</option>
+                    <option value="5">Separated</option>
+                    <option value="6">Widowed</option>
+                    <option value="1">Married (Armed Forces)</option>
+                    <option value="3">Married (Spouse Absent)</option>
+                </select>
+            </div>
+
+            <!-- Occupation -->
+            <div class="form-group">
+                <label for="occupation">Occupation</label>
+                <select id="occupation" name="occupation">
+                    <option value="9">Professional Specialty</option>
+                    <option value="3">Executive / Managerial</option>
+                    <option value="12">Tech Support</option>
+                    <option value="11">Sales</option>
+                    <option value="0">Administrative / Clerical</option>
+                    <option value="2">Craft / Repair</option>
+                    <option value="13">Transport / Moving</option>
+                    <option value="6">Machine Operator</option>
+                    <option value="4">Farming / Fishing</option>
+                    <option value="10">Protective Services</option>
+                    <option value="5">Handlers / Cleaners</option>
+                    <option value="7">Other Service</option>
+                    <option value="8">Private Household</option>
+                    <option value="1">Armed Forces</option>
+                </select>
+            </div>
+
+            <!-- Relationship -->
+            <div class="form-group">
+                <label for="relationship">Relationship</label>
+                <select id="relationship" name="relationship">
+                    <option value="0">Husband</option>
+                    <option value="5">Wife</option>
+                    <option value="1">Not in Family</option>
+                    <option value="3">Own Child</option>
+                    <option value="4">Unmarried</option>
+                    <option value="2">Other Relative</option>
+                </select>
+            </div>
+
+            <!-- Race -->
+            <div class="form-group">
+                <label for="race">Race</label>
+                <select id="race" name="race">
+                    <option value="4">White</option>
+                    <option value="2">Black</option>
+                    <option value="1">Asian / Pacific Islander</option>
+                    <option value="0">American Indian / Eskimo</option>
+                    <option value="3">Other</option>
+                </select>
+            </div>
+
+            <!-- Sex -->
+            <div class="form-group">
+                <label for="sex">Sex</label>
+                <select id="sex" name="sex">
+                    <option value="1">Male</option>
+                    <option value="0">Female</option>
+                </select>
+            </div>
+
+            <!-- Capital Gain -->
+            <div class="form-group">
+                <label for="capital_gain">Capital Gain ($)</label>
+                <input type="text" id="capital_gain" name="capital_gain" placeholder="e.g. 0" required>
+            </div>
+
+            <!-- Capital Loss -->
+            <div class="form-group">
+                <label for="capital_loss">Capital Loss ($)</label>
+                <input type="text" id="capital_loss" name="capital_loss" placeholder="e.g. 0" required>
+            </div>
+
+            <!-- Hours per Week -->
+            <div class="form-group">
+                <label for="hours_per_week">Hours per Week</label>
+                <input type="text" id="hours_per_week" name="hours_per_week" placeholder="e.g. 40" required>
+            </div>
+
+            <!-- Native Country -->
+            <div class="form-group">
+                <label for="native_country">Country of Origin</label>
+                <select id="native_country" name="native_country">
+                    <option value="38">United States</option>
+                    <option value="25">Mexico</option>
+                    <option value="1">Canada</option>
+                    <option value="18">India</option>
+                    <option value="2">China</option>
+                    <option value="29">Philippines</option>
+                    <option value="10">Germany</option>
+                    <option value="8">England</option>
+                    <option value="4">Cuba</option>
+                    <option value="22">Jamaica</option>
+                    <option value="21">Italy</option>
+                    <option value="23">Japan</option>
+                    <option value="9">France</option>
+                    <option value="19">Iran</option>
+                    <option value="32">Puerto Rico</option>
+                    <option value="30">Poland</option>
+                    <option value="3">Columbia</option>
+                    <option value="0">Cambodia</option>
+                    <option value="36">Thailand</option>
+                    <option value="6">Ecuador</option>
+                    <option value="24">Laos</option>
+                    <option value="35">Taiwan</option>
+                    <option value="13">Haiti</option>
+                    <option value="31">Portugal</option>
+                    <option value="5">Dominican Republic</option>
+                    <option value="7">El Salvador</option>
+                    <option value="12">Guatemala</option>
+                    <option value="11">Greece</option>
+                    <option value="34">South</option>
+                    <option value="39">Vietnam</option>
+                    <option value="28">Peru</option>
+                    <option value="40">Yugoslavia</option>
+                    <option value="33">Scotland</option>
+                    <option value="20">Ireland</option>
+                    <option value="17">Hungary</option>
+                    <option value="16">Hong Kong</option>
+                    <option value="15">Honduras</option>
+                    <option value="37">Trinidad & Tobago</option>
+                    <option value="26">Nicaragua</option>
+                    <option value="14">Netherlands</option>
+                    <option value="27">Outlying US</option>
+                </select>
+            </div>
+
+            <!-- Submit -->
+            <div class="submit-wrapper">
+                <button type="submit" class="btn-submit">Predict Income</button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

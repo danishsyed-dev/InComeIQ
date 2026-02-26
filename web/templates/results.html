@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}ML Income Predictor — Result{% endblock %}
+
+{% block content %}
+<div class="card result-card result-{{ result_class }}">
+    {% if result_class == 'positive' %}
+    <div class="result-icon">💰</div>
+    {% else %}
+    <div class="result-icon">📊</div>
+    {% endif %}
+
+    <div class="result-message">{{ prediction }}</div>
+
+    <div class="result-detail">
+        {% if result_class == 'positive' %}
+        Based on the provided demographic data, the model predicts a higher income bracket.
+        {% else %}
+        Based on the provided demographic data, the model predicts a standard income bracket.
+        {% endif %}
+    </div>
+
+    <a href="/" class="btn-back">← Make Another Prediction</a>
+</div>
+{% endblock %}

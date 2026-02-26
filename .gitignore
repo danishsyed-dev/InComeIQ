@@ -1,0 +1,41 @@
+# Environment
+env/
+venv/
+.venv/
+*.pyc
+__pycache__/
+.Python
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Project artifacts (generated at runtime)
+artifacts/
+logs/
+
+# Serialized models
+*.pkl
+*.joblib
+
+# Data files (downloaded via script)
+data/raw/*.csv
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Environment variables
+.env
+.env.local
+
+# Distribution
+dist/
+build/
+*.egg-info/
