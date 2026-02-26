@@ -9,6 +9,7 @@ from flask import Blueprint, render_template, request
 
 from pipelines.predict import PredictionPipeline, CustomInput
 from web.validators import validate_prediction_input
+from web.models import db, PredictionHistory
 
 main_bp = Blueprint("main", __name__)
 
@@ -47,6 +48,30 @@ def predict():
 
     # Run prediction
     result, probability, plot_filename = prediction_pipeline.predict(features_df)
+    
+    # Save to history
+    try:
+        history_entry = PredictionHistory(
+            age=parsed["age"],
+            workclass=parsed["workclass"],
+            education_num=parsed["education_num"],
+            marital_status=parsed["marital_status"],
+            occupation=parsed["occupation"],
+            relationship=parsed["relationship"],
+            race=parsed["race"],
+            sex=parsed["sex"],
+            capital_gain=parsed["capital_gain"],
+            capital_loss=parsed["capital_loss"],
+            hours_per_week=parsed["hours_per_week"],
+            native_country=parsed["native_country"],
+            prediction_result=result,
+            confidence_score=probability,
+        )
+        db.session.add(history_entry)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        print(f"Failed to save prediction history: {e}")
 
     if result == 1:
         message = "Your Yearly Income is Predicted to be More Than $50,000"
