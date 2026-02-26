@@ -46,7 +46,7 @@ def predict():
     features_df = user_input.to_dataframe()
 
     # Run prediction
-    result = prediction_pipeline.predict(features_df)
+    result, probability, plot_filename = prediction_pipeline.predict(features_df)
 
     if result == 1:
         message = "Your Yearly Income is Predicted to be More Than $50,000"
@@ -55,8 +55,13 @@ def predict():
         message = "Your Yearly Income is Predicted to be $50,000 or Less"
         result_class = "negative"
 
+    # Format probability if available
+    prob_str = f"{probability * 100:.1f}%" if probability is not None else "N/A"
+
     return render_template(
         "results.html",
         prediction=message,
         result_class=result_class,
+        probability=prob_str,
+        plot_filename=plot_filename,
     )

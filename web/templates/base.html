@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +11,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         /* ── Reset & Base ─────────────────────────────────── */
-        *, *::before, *::after {
+        *,
+        *::before,
+        *::after {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
@@ -221,6 +224,21 @@
             font-size: 0.9rem;
         }
 
+        .confidence-badge {
+            display: inline-block;
+            margin: 0.5rem 0 1.5rem 0;
+            padding: 0.4rem 1.2rem;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #a5b4fc;
+        }
+
+        .confidence-badge strong {
+            color: #fff;
+        }
+
         .btn-back {
             display: inline-block;
             margin-top: 2rem;
@@ -240,6 +258,29 @@
             transform: translateY(-1px);
         }
 
+        .feature-importance-container {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            width: 100%;
+        }
+
+        .feature-title {
+            font-size: 1.1rem;
+            color: #e0e0e0;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .feature-plot {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 0.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
         /* ── Footer ───────────────────────────────────────── */
         .footer {
             text-align: center;
@@ -254,6 +295,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -266,6 +308,7 @@
     </style>
     {% block extra_head %}{% endblock %}
 </head>
+
 <body>
     <div class="container">
         <div class="header">
@@ -280,4 +323,5 @@
         </div>
     </div>
 </body>
+
 </html>
