@@ -1,200 +1,416 @@
 {% extends "base.html" %}
-{% block title %}ML Income Predictor — Predict Your Income{% endblock %}
+{% block title %}InComeIQ — Predict Your Income Bracket{% endblock %}
 
 {% block content %}
+
+<!-- ── Page Hero ─────────────────────────────────────────── -->
+<div class="page-hero">
+    <h1>Income Bracket Predictor</h1>
+    <p>Enter your demographic details and let the model make a prediction.</p>
+    <span class="accuracy-badge">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="20 6 9 17 4 12" />
+        </svg>
+        ~85% accuracy &middot; UCI Adult Dataset
+    </span>
+</div>
+
+<!-- ── Error Banner ─────────────────────────────────────── -->
+{% if error %}
+<div class="alert alert-error" role="alert">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="10" />
+        <line x1="12" y1="8" x2="12" y2="12" />
+        <line x1="12" y1="16" x2="12.01" y2="16" />
+    </svg>
+    <span>{{ error }}</span>
+</div>
+{% endif %}
+
+<!-- ── Prediction Form ──────────────────────────────────── -->
 <div class="card">
-    {% if error %}
-    <div class="alert-error">
-        ⚠️ {{ error }}
-    </div>
-    {% endif %}
+    <form id="prediction-form" action="/" method="POST" novalidate>
 
-    <form action="/" method="POST">
-        <div class="form-grid">
-            <!-- Age -->
-            <div class="form-group">
-                <label for="age">Age</label>
-                <input type="text" id="age" name="age" placeholder="e.g. 35" required>
-            </div>
+        <!-- Section 1: Personal Info -->
+        <fieldset>
+            <div class="fieldset-inner">
+                <legend>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round"
+                        style="display:inline;vertical-align:middle;margin-right:5px" aria-hidden="true">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
+                    </svg>
+                    Personal Info
+                </legend>
 
-            <!-- Workclass -->
-            <div class="form-group">
-                <label for="workclass">Employment Type</label>
-                <select id="workclass" name="workclass">
-                    <option value="3">Private</option>
-                    <option value="6">State Government</option>
-                    <option value="0">Federal Government</option>
-                    <option value="1">Local Government</option>
-                    <option value="4">Self-employed (Inc)</option>
-                    <option value="5">Self-employed (Not Inc)</option>
-                    <option value="7">Without Pay</option>
-                    <option value="2">Never Worked</option>
-                </select>
-            </div>
+                <div class="form-grid-3">
 
-            <!-- Education -->
-            <div class="form-group">
-                <label for="education_num">Education Level</label>
-                <select id="education_num" name="education_num">
-                    <option value="13">Bachelors</option>
-                    <option value="14">Masters</option>
-                    <option value="16">Doctorate</option>
-                    <option value="15">Prof School</option>
-                    <option value="12">Associate (Academic)</option>
-                    <option value="11">Associate (Vocational)</option>
-                    <option value="10">Some College</option>
-                    <option value="9">High School Grad</option>
-                    <option value="8">12th Grade</option>
-                    <option value="7">11th Grade</option>
-                    <option value="6">10th Grade</option>
-                    <option value="5">9th Grade</option>
-                    <option value="4">7th-8th Grade</option>
-                    <option value="3">5th-6th Grade</option>
-                    <option value="2">1st-4th Grade</option>
-                    <option value="1">Preschool</option>
-                </select>
-            </div>
+                    <!-- Age -->
+                    <div class="form-group">
+                        <label for="age">Age</label>
+                        <input type="number" id="age" name="age" placeholder="e.g. 35" min="17" max="90" required>
+                        <span class="field-error">Age must be between 17 and 90.</span>
+                    </div>
 
-            <!-- Marital Status -->
-            <div class="form-group">
-                <label for="marital_status">Marital Status</label>
-                <select id="marital_status" name="marital_status">
-                    <option value="4">Never Married</option>
-                    <option value="2">Married (Civilian)</option>
-                    <option value="0">Divorced</option>
-                    <option value="5">Separated</option>
-                    <option value="6">Widowed</option>
-                    <option value="1">Married (Armed Forces)</option>
-                    <option value="3">Married (Spouse Absent)</option>
-                </select>
-            </div>
+                    <!-- Sex -->
+                    <div class="form-group">
+                        <label for="sex">Sex</label>
+                        <div class="select-wrap">
+                            <select id="sex" name="sex">
+                                <option value="1">Male</option>
+                                <option value="0">Female</option>
+                            </select>
+                        </div>
+                    </div>
 
-            <!-- Occupation -->
-            <div class="form-group">
-                <label for="occupation">Occupation</label>
-                <select id="occupation" name="occupation">
-                    <option value="9">Professional Specialty</option>
-                    <option value="3">Executive / Managerial</option>
-                    <option value="12">Tech Support</option>
-                    <option value="11">Sales</option>
-                    <option value="0">Administrative / Clerical</option>
-                    <option value="2">Craft / Repair</option>
-                    <option value="13">Transport / Moving</option>
-                    <option value="6">Machine Operator</option>
-                    <option value="4">Farming / Fishing</option>
-                    <option value="10">Protective Services</option>
-                    <option value="5">Handlers / Cleaners</option>
-                    <option value="7">Other Service</option>
-                    <option value="8">Private Household</option>
-                    <option value="1">Armed Forces</option>
-                </select>
-            </div>
+                    <!-- Race -->
+                    <div class="form-group">
+                        <label for="race">Race</label>
+                        <div class="select-wrap">
+                            <select id="race" name="race">
+                                <option value="4">White</option>
+                                <option value="2">Black</option>
+                                <option value="1">Asian / Pacific Islander</option>
+                                <option value="0">American Indian / Eskimo</option>
+                                <option value="3">Other</option>
+                            </select>
+                        </div>
+                    </div>
 
-            <!-- Relationship -->
-            <div class="form-group">
-                <label for="relationship">Relationship</label>
-                <select id="relationship" name="relationship">
-                    <option value="0">Husband</option>
-                    <option value="5">Wife</option>
-                    <option value="1">Not in Family</option>
-                    <option value="3">Own Child</option>
-                    <option value="4">Unmarried</option>
-                    <option value="2">Other Relative</option>
-                </select>
-            </div>
+                    <!-- Marital Status -->
+                    <div class="form-group">
+                        <label for="marital_status">Marital Status</label>
+                        <div class="select-wrap">
+                            <select id="marital_status" name="marital_status">
+                                <option value="4">Never Married</option>
+                                <option value="2">Married (Civilian)</option>
+                                <option value="0">Divorced</option>
+                                <option value="5">Separated</option>
+                                <option value="6">Widowed</option>
+                                <option value="1">Married (Armed Forces)</option>
+                                <option value="3">Married (Spouse Absent)</option>
+                            </select>
+                        </div>
+                    </div>
 
-            <!-- Race -->
-            <div class="form-group">
-                <label for="race">Race</label>
-                <select id="race" name="race">
-                    <option value="4">White</option>
-                    <option value="2">Black</option>
-                    <option value="1">Asian / Pacific Islander</option>
-                    <option value="0">American Indian / Eskimo</option>
-                    <option value="3">Other</option>
-                </select>
-            </div>
+                    <!-- Relationship -->
+                    <div class="form-group">
+                        <label for="relationship">
+                            Relationship
+                            <span class="tooltip-wrap" tabindex="0"
+                                aria-label="Your role within the household family unit">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                                    <line x1="12" y1="17" x2="12.01" y2="17" />
+                                </svg>
+                                <span class="tooltip-text">Your role within the household family unit</span>
+                            </span>
+                        </label>
+                        <div class="select-wrap">
+                            <select id="relationship" name="relationship">
+                                <option value="0">Husband</option>
+                                <option value="5">Wife</option>
+                                <option value="1">Not in Family</option>
+                                <option value="3">Own Child</option>
+                                <option value="4">Unmarried</option>
+                                <option value="2">Other Relative</option>
+                            </select>
+                        </div>
+                    </div>
 
-            <!-- Sex -->
-            <div class="form-group">
-                <label for="sex">Sex</label>
-                <select id="sex" name="sex">
-                    <option value="1">Male</option>
-                    <option value="0">Female</option>
-                </select>
-            </div>
+                    <!-- Native Country -->
+                    <div class="form-group">
+                        <label for="native_country">Country of Origin</label>
+                        <div class="select-wrap">
+                            <select id="native_country" name="native_country">
+                                <option value="38">United States</option>
+                                <option value="25">Mexico</option>
+                                <option value="1">Canada</option>
+                                <option value="18">India</option>
+                                <option value="2">China</option>
+                                <option value="29">Philippines</option>
+                                <option value="10">Germany</option>
+                                <option value="8">England</option>
+                                <option value="4">Cuba</option>
+                                <option value="22">Jamaica</option>
+                                <option value="21">Italy</option>
+                                <option value="23">Japan</option>
+                                <option value="9">France</option>
+                                <option value="19">Iran</option>
+                                <option value="32">Puerto Rico</option>
+                                <option value="30">Poland</option>
+                                <option value="3">Columbia</option>
+                                <option value="0">Cambodia</option>
+                                <option value="36">Thailand</option>
+                                <option value="6">Ecuador</option>
+                                <option value="24">Laos</option>
+                                <option value="35">Taiwan</option>
+                                <option value="13">Haiti</option>
+                                <option value="31">Portugal</option>
+                                <option value="5">Dominican Republic</option>
+                                <option value="7">El Salvador</option>
+                                <option value="12">Guatemala</option>
+                                <option value="11">Greece</option>
+                                <option value="34">South</option>
+                                <option value="39">Vietnam</option>
+                                <option value="28">Peru</option>
+                                <option value="40">Yugoslavia</option>
+                                <option value="33">Scotland</option>
+                                <option value="20">Ireland</option>
+                                <option value="17">Hungary</option>
+                                <option value="16">Hong Kong</option>
+                                <option value="15">Honduras</option>
+                                <option value="37">Trinidad &amp; Tobago</option>
+                                <option value="26">Nicaragua</option>
+                                <option value="14">Netherlands</option>
+                                <option value="27">Outlying US</option>
+                            </select>
+                        </div>
+                    </div>
 
-            <!-- Capital Gain -->
-            <div class="form-group">
-                <label for="capital_gain">Capital Gain ($)</label>
-                <input type="text" id="capital_gain" name="capital_gain" placeholder="e.g. 0" required>
+                </div>
             </div>
+        </fieldset>
 
-            <!-- Capital Loss -->
-            <div class="form-group">
-                <label for="capital_loss">Capital Loss ($)</label>
-                <input type="text" id="capital_loss" name="capital_loss" placeholder="e.g. 0" required>
-            </div>
+        <!-- Section 2: Education -->
+        <fieldset>
+            <div class="fieldset-inner">
+                <legend>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round"
+                        style="display:inline;vertical-align:middle;margin-right:5px" aria-hidden="true">
+                        <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+                        <path d="M6 12v5c3 3 9 3 12 0v-5" />
+                    </svg>
+                    Education
+                </legend>
 
-            <!-- Hours per Week -->
-            <div class="form-group">
-                <label for="hours_per_week">Hours per Week</label>
-                <input type="text" id="hours_per_week" name="hours_per_week" placeholder="e.g. 40" required>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="education_num">Education Level</label>
+                        <div class="select-wrap">
+                            <select id="education_num" name="education_num">
+                                <option value="16">Doctorate</option>
+                                <option value="15">Prof School</option>
+                                <option value="14">Masters</option>
+                                <option value="13">Bachelors</option>
+                                <option value="12">Associate (Academic)</option>
+                                <option value="11">Associate (Vocational)</option>
+                                <option value="10">Some College</option>
+                                <option value="9">High School Grad</option>
+                                <option value="8">12th Grade</option>
+                                <option value="7">11th Grade</option>
+                                <option value="6">10th Grade</option>
+                                <option value="5">9th Grade</option>
+                                <option value="4">7th–8th Grade</option>
+                                <option value="3">5th–6th Grade</option>
+                                <option value="2">1st–4th Grade</option>
+                                <option value="1">Preschool</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </fieldset>
 
-            <!-- Native Country -->
-            <div class="form-group">
-                <label for="native_country">Country of Origin</label>
-                <select id="native_country" name="native_country">
-                    <option value="38">United States</option>
-                    <option value="25">Mexico</option>
-                    <option value="1">Canada</option>
-                    <option value="18">India</option>
-                    <option value="2">China</option>
-                    <option value="29">Philippines</option>
-                    <option value="10">Germany</option>
-                    <option value="8">England</option>
-                    <option value="4">Cuba</option>
-                    <option value="22">Jamaica</option>
-                    <option value="21">Italy</option>
-                    <option value="23">Japan</option>
-                    <option value="9">France</option>
-                    <option value="19">Iran</option>
-                    <option value="32">Puerto Rico</option>
-                    <option value="30">Poland</option>
-                    <option value="3">Columbia</option>
-                    <option value="0">Cambodia</option>
-                    <option value="36">Thailand</option>
-                    <option value="6">Ecuador</option>
-                    <option value="24">Laos</option>
-                    <option value="35">Taiwan</option>
-                    <option value="13">Haiti</option>
-                    <option value="31">Portugal</option>
-                    <option value="5">Dominican Republic</option>
-                    <option value="7">El Salvador</option>
-                    <option value="12">Guatemala</option>
-                    <option value="11">Greece</option>
-                    <option value="34">South</option>
-                    <option value="39">Vietnam</option>
-                    <option value="28">Peru</option>
-                    <option value="40">Yugoslavia</option>
-                    <option value="33">Scotland</option>
-                    <option value="20">Ireland</option>
-                    <option value="17">Hungary</option>
-                    <option value="16">Hong Kong</option>
-                    <option value="15">Honduras</option>
-                    <option value="37">Trinidad & Tobago</option>
-                    <option value="26">Nicaragua</option>
-                    <option value="14">Netherlands</option>
-                    <option value="27">Outlying US</option>
-                </select>
-            </div>
+        <!-- Section 3: Employment -->
+        <fieldset>
+            <div class="fieldset-inner">
+                <legend>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round"
+                        style="display:inline;vertical-align:middle;margin-right:5px" aria-hidden="true">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                    </svg>
+                    Employment
+                </legend>
 
-            <!-- Submit -->
-            <div class="submit-wrapper">
-                <button type="submit" class="btn-submit">Predict Income</button>
+                <div class="form-grid-3">
+
+                    <!-- Workclass -->
+                    <div class="form-group">
+                        <label for="workclass">Employment Type</label>
+                        <div class="select-wrap">
+                            <select id="workclass" name="workclass">
+                                <option value="3">Private</option>
+                                <option value="6">State Government</option>
+                                <option value="0">Federal Government</option>
+                                <option value="1">Local Government</option>
+                                <option value="4">Self-employed (Inc)</option>
+                                <option value="5">Self-employed (Not Inc)</option>
+                                <option value="7">Without Pay</option>
+                                <option value="2">Never Worked</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Occupation -->
+                    <div class="form-group">
+                        <label for="occupation">Occupation</label>
+                        <div class="select-wrap">
+                            <select id="occupation" name="occupation">
+                                <option value="9">Professional Specialty</option>
+                                <option value="3">Executive / Managerial</option>
+                                <option value="12">Tech Support</option>
+                                <option value="11">Sales</option>
+                                <option value="0">Administrative / Clerical</option>
+                                <option value="2">Craft / Repair</option>
+                                <option value="13">Transport / Moving</option>
+                                <option value="6">Machine Operator</option>
+                                <option value="4">Farming / Fishing</option>
+                                <option value="10">Protective Services</option>
+                                <option value="5">Handlers / Cleaners</option>
+                                <option value="7">Other Service</option>
+                                <option value="8">Private Household</option>
+                                <option value="1">Armed Forces</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Hours per Week -->
+                    <div class="form-group">
+                        <label for="hours_per_week">Hours per Week</label>
+                        <input type="number" id="hours_per_week" name="hours_per_week" placeholder="e.g. 40" min="1"
+                            max="99" required>
+                        <span class="field-error">Must be between 1 and 99.</span>
+                    </div>
+
+                </div>
             </div>
+        </fieldset>
+
+        <!-- Section 4: Financials -->
+        <fieldset>
+            <div class="fieldset-inner">
+                <legend>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round"
+                        style="display:inline;vertical-align:middle;margin-right:5px" aria-hidden="true">
+                        <line x1="12" y1="1" x2="12" y2="23" />
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                    </svg>
+                    Financials
+                </legend>
+
+                <div class="form-grid">
+
+                    <!-- Capital Gain -->
+                    <div class="form-group">
+                        <label for="capital_gain">
+                            Capital Gain ($)
+                            <span class="tooltip-wrap" tabindex="0"
+                                aria-label="Profit from the sale of investments or assets in the past year">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                                    <line x1="12" y1="17" x2="12.01" y2="17" />
+                                </svg>
+                                <span class="tooltip-text">Profit from selling investments or assets</span>
+                            </span>
+                        </label>
+                        <input type="number" id="capital_gain" name="capital_gain" placeholder="e.g. 0" min="0"
+                            required>
+                        <span class="field-error">Must be 0 or greater.</span>
+                    </div>
+
+                    <!-- Capital Loss -->
+                    <div class="form-group">
+                        <label for="capital_loss">
+                            Capital Loss ($)
+                            <span class="tooltip-wrap" tabindex="0"
+                                aria-label="Loss from the sale of investments or assets in the past year">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                                    <line x1="12" y1="17" x2="12.01" y2="17" />
+                                </svg>
+                                <span class="tooltip-text">Loss from selling investments or assets</span>
+                            </span>
+                        </label>
+                        <input type="number" id="capital_loss" name="capital_loss" placeholder="e.g. 0" min="0"
+                            required>
+                        <span class="field-error">Must be 0 or greater.</span>
+                    </div>
+
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- Section 5: Model Selection -->
+        <fieldset>
+            <div class="fieldset-inner">
+                <legend>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round"
+                        style="display:inline;vertical-align:middle;margin-right:5px" aria-hidden="true">
+                        <circle cx="12" cy="12" r="3" />
+                        <path
+                            d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+                    </svg>
+                    ML Model
+                </legend>
+
+                <div class="model-tabs" role="radiogroup" aria-label="Select prediction model">
+
+                    <input class="model-tab-input" type="radio" name="model" id="model_rf" value="random_forest"
+                        checked>
+                    <label class="model-tab-label" for="model_rf">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                        </svg>
+                        Random Forest
+                    </label>
+
+                    <input class="model-tab-input" type="radio" name="model" id="model_xgb" value="xgboost">
+                    <label class="model-tab-label" for="model_xgb">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                        </svg>
+                        XGBoost
+                    </label>
+
+                    <input class="model-tab-input" type="radio" name="model" id="model_svm" value="svm">
+                    <label class="model-tab-label" for="model_svm">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <circle cx="12" cy="12" r="10" />
+                            <circle cx="12" cy="12" r="3" />
+                        </svg>
+                        SVM
+                    </label>
+
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- Submit -->
+        <div class="form-submit-row">
+            <button type="submit" id="submit-btn" class="btn btn-primary btn-primary-lg">
+                <span class="btn-spinner" id="btn-spinner" aria-hidden="true"
+                    style="display:none;width:15px;height:15px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;"></span>
+                <span id="btn-text">Predict Income</span>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                    <polyline points="12 5 19 12 12 19" />
+                </svg>
+            </button>
         </div>
+
     </form>
 </div>
+
 {% endblock %}

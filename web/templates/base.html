@@ -2,326 +2,66 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}ML Income Predictor{% endblock %}</title>
-    <meta name="description" content="Predict income brackets using machine learning — powered by scikit-learn">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* ── Reset & Base ─────────────────────────────────── */
-        *,
-        *::before,
-        *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #0f0c29 0%, #1a1a3e 40%, #24243e 100%);
-            color: #e0e0e0;
-            line-height: 1.6;
-        }
-
-        /* ── Animated background particles ────────────────── */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background:
-                radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
-                radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        /* ── Layout ───────────────────────────────────────── */
-        .container {
-            position: relative;
-            z-index: 1;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 2rem 1.5rem;
-        }
-
-        /* ── Header ───────────────────────────────────────── */
-        .header {
-            text-align: center;
-            margin-bottom: 2.5rem;
-        }
-
-        .header h1 {
-            font-size: 2.2rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #818cf8, #a78bfa, #c084fc);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 0.5rem;
-            letter-spacing: -0.5px;
-        }
-
-        .header p {
-            color: #9ca3af;
-            font-size: 0.95rem;
-            font-weight: 300;
-        }
-
-        /* ── Card (Glassmorphism) ─────────────────────────── */
-        .card {
-            background: rgba(255, 255, 255, 0.04);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 20px;
-            padding: 2.5rem;
-            box-shadow:
-                0 8px 32px rgba(0, 0, 0, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.05);
-            transition: transform 0.2s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-2px);
-        }
-
-        /* ── Form Grid ────────────────────────────────────── */
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-        }
-
-        @media (max-width: 640px) {
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* ── Form Group ───────────────────────────────────── */
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.4rem;
-        }
-
-        .form-group label {
-            font-size: 0.8rem;
-            font-weight: 500;
-            color: #a5b4fc;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            color: #e0e0e0;
-            font-size: 0.9rem;
-            font-family: inherit;
-            transition: all 0.2s ease;
-            outline: none;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus {
-            border-color: #818cf8;
-            box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.2);
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        .form-group input::placeholder {
-            color: #6b7280;
-        }
-
-        .form-group select option {
-            background: #1e1e3f;
-            color: #e0e0e0;
-        }
-
-        /* ── Submit Button ────────────────────────────────── */
-        .submit-wrapper {
-            grid-column: 1 / -1;
-            display: flex;
-            justify-content: center;
-            margin-top: 1rem;
-        }
-
-        .btn-submit {
-            padding: 0.85rem 3rem;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 600;
-            font-family: inherit;
-            cursor: pointer;
-            letter-spacing: 0.5px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
-        }
-
-        .btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
-        }
-
-        .btn-submit:active {
-            transform: translateY(0);
-        }
-
-        /* ── Error Alert ──────────────────────────────────── */
-        .alert-error {
-            background: rgba(239, 68, 68, 0.15);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            border-radius: 12px;
-            padding: 1rem 1.5rem;
-            margin-bottom: 1.5rem;
-            color: #fca5a5;
-            font-size: 0.9rem;
-        }
-
-        /* ── Result Card ──────────────────────────────────── */
-        .result-card {
-            text-align: center;
-            padding: 3rem 2rem;
-        }
-
-        .result-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-        }
-
-        .result-message {
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .result-positive .result-message {
-            color: #34d399;
-        }
-
-        .result-negative .result-message {
-            color: #fbbf24;
-        }
-
-        .result-detail {
-            color: #9ca3af;
-            font-size: 0.9rem;
-        }
-
-        .confidence-badge {
-            display: inline-block;
-            margin: 0.5rem 0 1.5rem 0;
-            padding: 0.4rem 1.2rem;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 20px;
-            font-size: 0.85rem;
-            color: #a5b4fc;
-        }
-
-        .confidence-badge strong {
-            color: #fff;
-        }
-
-        .btn-back {
-            display: inline-block;
-            margin-top: 2rem;
-            padding: 0.7rem 2rem;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 10px;
-            color: #a5b4fc;
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: all 0.2s ease;
-        }
-
-        .btn-back:hover {
-            background: rgba(255, 255, 255, 0.12);
-            transform: translateY(-1px);
-        }
-
-        .feature-importance-container {
-            margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            width: 100%;
-        }
-
-        .feature-title {
-            font-size: 1.1rem;
-            color: #e0e0e0;
-            margin-bottom: 1rem;
-            font-weight: 500;
-        }
-
-        .feature-plot {
-            max-width: 100%;
-            height: auto;
-            border-radius: 12px;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 0.5rem;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        /* ── Footer ───────────────────────────────────────── */
-        .footer {
-            text-align: center;
-            margin-top: 2rem;
-            color: #4b5563;
-            font-size: 0.8rem;
-        }
-
-        /* ── Animations ───────────────────────────────────── */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .card {
-            animation: fadeInUp 0.5s ease-out;
-        }
-    </style>
-    {% block extra_head %}{% endblock %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}InComeIQ — ML Income Predictor{% endblock %}</title>
+  <meta name="description" content="Predict income brackets using machine learning — powered by scikit-learn and the UCI Adult dataset.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  {% block extra_head %}{% endblock %}
 </head>
 
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>ML Income Predictor</h1>
-            <p>Predict income brackets using machine learning</p>
-        </div>
 
-        {% block content %}{% endblock %}
+  <!-- ── Navbar ─────────────────────────────────────────────── -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="navbar-inner">
+      <a href="/" class="navbar-brand" aria-label="InComeIQ Home">
+        <!-- Brain / chart icon -->
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.46 2.5 2.5 0 0 1-1.04-4.79A2.5 2.5 0 0 1 4 12a2.5 2.5 0 0 1 2.5-2.5H9.5V2Z"/>
+          <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.46 2.5 2.5 0 0 0 1.04-4.79A2.5 2.5 0 0 0 20 12a2.5 2.5 0 0 0-2.5-2.5H14.5V2Z"/>
+        </svg>
+        <span class="navbar-wordmark">InCome<span>IQ</span></span>
+      </a>
 
-        <div class="footer">
-            <p>Built with Flask & scikit-learn</p>
-        </div>
+      <div class="navbar-links">
+        <a href="https://github.com/danishsyed-dev" target="_blank" rel="noopener noreferrer" class="navbar-link" aria-label="GitHub">
+          <!-- GitHub icon -->
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2Z"/>
+          </svg>
+          GitHub
+        </a>
+      </div>
     </div>
+  </nav>
+
+  <!-- ── Main Content ──────────────────────────────────────── -->
+  <main>
+    <div class="container">
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+
+  <!-- ── Footer ─────────────────────────────────────────────── -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer-inner">
+      <p class="footer-text">
+        Built with Flask &amp; scikit-learn &middot; UCI Adult Dataset
+      </p>
+      <div class="footer-links">
+        <a href="https://archive.ics.uci.edu/dataset/2/adult" target="_blank" rel="noopener noreferrer" class="footer-link">Dataset</a>
+        <a href="https://github.com/danishsyed-dev" target="_blank" rel="noopener noreferrer" class="footer-link">GitHub</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+  {% block extra_scripts %}{% endblock %}
+
 </body>
 
 </html>

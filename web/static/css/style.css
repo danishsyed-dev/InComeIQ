@@ -1,0 +1,892 @@
+/* ============================================================
+   InComeIQ — Design System
+   style.css
+   ============================================================ */
+
+/* ── 1. CSS Custom Properties (Design Tokens) ───────────────── */
+:root {
+  /* Colors */
+  --bg-base: #0d1117;
+  --bg-surface: #161b22;
+  --bg-surface-hover: #1c2128;
+  --border: #30363d;
+  --border-subtle: #21262d;
+
+  --text-primary: #e6edf3;
+  --text-secondary: #8b949e;
+  --text-muted: #484f58;
+
+  --accent: #3b82f6;
+  --accent-hover: #2563eb;
+  --accent-subtle: rgba(59, 130, 246, 0.12);
+
+  --success: #22c55e;
+  --success-subtle: rgba(34, 197, 94, 0.12);
+  --warning: #f59e0b;
+  --warning-subtle: rgba(245, 158, 11, 0.12);
+  --error: #ef4444;
+  --error-subtle: rgba(239, 68, 68, 0.12);
+
+  --input-bg: #0d1117;
+  --input-border: #30363d;
+  --input-focus: #3b82f6;
+
+  /* Spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  /* Border radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
+
+  /* Transitions */
+  --transition: 0.2s ease;
+}
+
+/* ── 2. Reset & Base ─────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+}
+
+main {
+  flex: 1;
+  padding: var(--space-7) 0;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+a:hover {
+  color: var(--accent-hover);
+}
+
+/* ── 3. Navbar ────────────────────────────────────────────────── */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  background: rgba(13, 17, 23, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+.navbar-inner {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 var(--space-5);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: -0.3px;
+  text-decoration: none;
+}
+
+.navbar-brand:hover {
+  color: var(--text-primary);
+}
+
+.navbar-brand svg {
+  color: var(--accent);
+}
+
+.navbar-wordmark span {
+  color: var(--accent);
+}
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.navbar-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  transition: color var(--transition), background var(--transition);
+}
+
+.navbar-link:hover {
+  color: var(--text-primary);
+  background: var(--bg-surface-hover);
+}
+
+/* ── 4. Page Container ───────────────────────────────────────── */
+.container {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 var(--space-5);
+}
+
+/* ── 5. Card / Panel ─────────────────────────────────────────── */
+.card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-sm);
+}
+
+@media (max-width: 640px) {
+  .card {
+    padding: var(--space-4);
+  }
+}
+
+/* ── 6. Hero Section ─────────────────────────────────────────── */
+.page-hero {
+  margin-bottom: var(--space-6);
+  text-align: center;
+}
+
+.page-hero h1 {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
+  margin-bottom: var(--space-2);
+}
+
+.page-hero p {
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+  margin-bottom: var(--space-4);
+}
+
+.accuracy-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  background: var(--accent-subtle);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  color: var(--accent);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  letter-spacing: 0.01em;
+}
+
+/* ── 7. Form Sections ────────────────────────────────────────── */
+fieldset {
+  border: none;
+  margin-bottom: var(--space-6);
+  padding: 0;
+}
+
+.fieldset-inner {
+  border-left: 2px solid var(--accent);
+  padding-left: var(--space-4);
+}
+
+legend {
+  float: left;
+  width: 100%;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: var(--space-4);
+  padding-left: var(--space-4);
+}
+
+legend+* {
+  clear: both;
+}
+
+/* ── 8. Form Grid & Groups ───────────────────────────────────── */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+.form-grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--space-4);
+}
+
+@media (max-width: 768px) {
+
+  .form-grid,
+  .form-grid-3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.form-group label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+/* Tooltip icon */
+.tooltip-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.tooltip-wrap svg {
+  color: var(--text-muted);
+  cursor: help;
+  transition: color var(--transition);
+}
+
+.tooltip-wrap:hover svg {
+  color: var(--text-secondary);
+}
+
+.tooltip-text {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1f2937;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-weight: 400;
+  white-space: nowrap;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  z-index: 50;
+  pointer-events: none;
+}
+
+.tooltip-wrap:hover .tooltip-text {
+  display: block;
+}
+
+/* ── 9. Input & Select ───────────────────────────────────────── */
+.form-group input,
+.form-group select {
+  width: 100%;
+  height: 40px;
+  padding: 0 var(--space-3);
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+/* Custom select arrow */
+.select-wrap {
+  position: relative;
+}
+
+.select-wrap select {
+  padding-right: var(--space-7);
+}
+
+.select-wrap::after {
+  content: '';
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid var(--text-secondary);
+  pointer-events: none;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: var(--input-focus);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+  background: #0d1117;
+}
+
+.form-group input::placeholder {
+  color: var(--text-muted);
+}
+
+.form-group select option {
+  background: #1c2128;
+  color: var(--text-primary);
+}
+
+/* Validation states */
+.form-group input.is-invalid,
+.form-group select.is-invalid {
+  border-color: var(--error);
+}
+
+.form-group input.is-invalid:focus,
+.form-group select.is-invalid:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25);
+}
+
+.field-error {
+  font-size: 0.75rem;
+  color: var(--error);
+  display: none;
+}
+
+.form-group.has-error .field-error {
+  display: block;
+}
+
+/* ── 10. Model Selector (Pill Tabs) ──────────────────────────── */
+.model-tabs {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.model-tab-input {
+  display: none;
+}
+
+.model-tab-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition);
+  user-select: none;
+}
+
+.model-tab-label:hover {
+  border-color: var(--accent);
+  color: var(--text-primary);
+  background: var(--accent-subtle);
+}
+
+.model-tab-input:checked+.model-tab-label {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-subtle);
+  font-weight: 600;
+}
+
+/* ── 11. Submit Button ───────────────────────────────────────── */
+.form-submit-row {
+  margin-top: var(--space-6);
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0.625rem var(--space-5);
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all var(--transition);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-primary-lg {
+  padding: 0.75rem var(--space-6);
+  font-size: 0.9375rem;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border-color: var(--border);
+}
+
+.btn-ghost:hover {
+  background: var(--bg-surface-hover);
+  color: var(--text-primary);
+  border-color: var(--border);
+}
+
+/* Spinner */
+.btn-spinner {
+  display: none;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Ensure inline spinner style works as a class too */
+.btn-spinner {
+  display: none;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+.btn-primary.loading .btn-spinner {
+  display: inline-block;
+}
+
+/* ── 12. Alert / Error Banner ────────────────────────────────── */
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-5);
+  font-size: 0.875rem;
+}
+
+.alert-error {
+  background: var(--error-subtle);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-left: 3px solid var(--error);
+  color: #fca5a5;
+}
+
+.alert svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* ── 13. Results — Hero ──────────────────────────────────────── */
+.result-hero {
+  text-align: center;
+  padding: var(--space-7) var(--space-5);
+}
+
+.result-icon-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  margin-bottom: var(--space-4);
+}
+
+.result-positive .result-icon-wrap {
+  background: var(--success-subtle);
+  color: var(--success);
+}
+
+.result-negative .result-icon-wrap {
+  background: var(--warning-subtle);
+  color: var(--warning);
+}
+
+.result-headline {
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  margin-bottom: var(--space-2);
+}
+
+.result-positive .result-headline {
+  color: var(--success);
+}
+
+.result-negative .result-headline {
+  color: var(--warning);
+}
+
+.result-sub {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin-bottom: var(--space-5);
+}
+
+/* Confidence bar */
+.confidence-wrap {
+  max-width: 360px;
+  margin: 0 auto var(--space-2);
+}
+
+.confidence-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-2);
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+}
+
+.confidence-header strong {
+  font-weight: 700;
+  color: var(--text-primary);
+  font-size: 0.9375rem;
+}
+
+.confidence-bar {
+  height: 8px;
+  background: var(--border);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.confidence-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  transition: width 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.result-positive .confidence-fill {
+  background: var(--success);
+}
+
+.result-negative .confidence-fill {
+  background: var(--warning);
+}
+
+/* ── 14. Results — Divider ───────────────────────────────────── */
+.result-divider {
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  margin: 0;
+}
+
+/* ── 15. Results — Input Summary ─────────────────────────────── */
+.summary-details {
+  padding: var(--space-4) var(--space-6);
+}
+
+.summary-details summary {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  list-style: none;
+  transition: color var(--transition);
+}
+
+.summary-details summary::-webkit-details-marker {
+  display: none;
+}
+
+.summary-details summary:hover {
+  color: var(--text-primary);
+}
+
+.summary-chevron {
+  margin-left: auto;
+  transition: transform var(--transition);
+  color: var(--text-muted);
+}
+
+.summary-details[open] .summary-chevron {
+  transform: rotate(180deg);
+}
+
+.summary-table {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2) var(--space-5);
+  margin-top: var(--space-4);
+}
+
+@media (max-width: 640px) {
+  .summary-table {
+    grid-template-columns: 1fr;
+  }
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 0.8125rem;
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.summary-row dt {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.summary-row dd {
+  color: var(--text-primary);
+  font-weight: 500;
+  margin: 0;
+}
+
+/* ── 16. Results — Feature Importance ───────────────────────── */
+.feature-panel {
+  padding: var(--space-5) var(--space-6);
+}
+
+.feature-panel-title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--space-1);
+}
+
+.feature-panel-sub {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-4);
+}
+
+.feature-plot {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  display: block;
+}
+
+.feature-empty {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* ── 17. Results — CTA Row ───────────────────────────────────── */
+.result-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-6);
+}
+
+/* Copy feedback */
+.copy-feedback {
+  font-size: 0.75rem;
+  color: var(--success);
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+
+.copy-feedback.visible {
+  opacity: 1;
+}
+
+/* ── 18. Footer ──────────────────────────────────────────────── */
+.footer {
+  border-top: 1px solid var(--border);
+  padding: var(--space-5) 0;
+  margin-top: auto;
+}
+
+.footer-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 var(--space-5);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.footer-text {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.footer-link {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  transition: color var(--transition);
+}
+
+.footer-link:hover {
+  color: var(--text-secondary);
+}
+
+/* ── 19. Focus Rings (Accessibility) ─────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ── 20. Animations ──────────────────────────────────────────── */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card {
+  animation: fadeInUp 0.35s ease-out;
+}
+
+/* ── 21. Responsive ──────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .page-hero h1 {
+    font-size: 1.5rem;
+  }
+
+  .result-hero {
+    padding: var(--space-5) var(--space-3);
+  }
+
+  .result-headline {
+    font-size: 1.5rem;
+  }
+
+  .summary-details,
+  .feature-panel,
+  .result-actions {
+    padding-left: var(--space-4);
+    padding-right: var(--space-4);
+  }
+
+  .form-submit-row {
+    justify-content: stretch;
+  }
+
+  .form-submit-row .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .result-actions {
+    flex-direction: column;
+  }
+
+  .result-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .footer-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
