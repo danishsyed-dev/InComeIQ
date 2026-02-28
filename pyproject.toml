@@ -1,3 +1,6 @@
 [project]
 name = "ml_income_predictor"
 version = "1.0.0"
+
+[scripts]
+app = "api/index:app"
