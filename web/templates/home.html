@@ -12,7 +12,7 @@
             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <polyline points="20 6 9 17 4 12" />
         </svg>
-        ~85% accuracy &middot; UCI Adult Dataset
+        84.7% accuracy &middot; UCI Adult Dataset
     </span>
 </div>
 
@@ -30,11 +30,10 @@
 {% endif %}
 
 <!-- ── Prediction Form ──────────────────────────────────── -->
-<div class="card">
-    <form id="prediction-form" action="/" method="POST" novalidate>
+<form id="prediction-form" class="form-container" action="/" method="POST" novalidate>
 
         <!-- Section 1: Personal Info -->
-        <fieldset>
+        <fieldset style="--stagger: 0">
             <div class="fieldset-inner">
                 <legend>
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -178,7 +177,7 @@
         </fieldset>
 
         <!-- Section 2: Education -->
-        <fieldset>
+        <fieldset style="--stagger: 1">
             <div class="fieldset-inner">
                 <legend>
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -219,7 +218,7 @@
         </fieldset>
 
         <!-- Section 3: Employment -->
-        <fieldset>
+        <fieldset style="--stagger: 2">
             <div class="fieldset-inner">
                 <legend>
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -286,7 +285,7 @@
         </fieldset>
 
         <!-- Section 4: Financials -->
-        <fieldset>
+        <fieldset style="--stagger: 3">
             <div class="fieldset-inner">
                 <legend>
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -345,7 +344,7 @@
         </fieldset>
 
         <!-- Section 5: Model Selection -->
-        <fieldset>
+        <fieldset style="--stagger: 4">
             <div class="fieldset-inner">
                 <legend>
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -397,7 +396,7 @@
         </fieldset>
 
         <!-- Submit -->
-        <div class="form-submit-row">
+        <div class="form-submit-row" style="--stagger: 5">
             <button type="submit" id="submit-btn" class="btn btn-primary btn-primary-lg">
                 <span class="btn-spinner" id="btn-spinner" aria-hidden="true"
                     style="display:none;width:15px;height:15px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;"></span>
@@ -410,7 +409,6 @@
             </button>
         </div>
 
-    </form>
-</div>
+</form>
 
 {% endblock %}

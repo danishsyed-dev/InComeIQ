@@ -23,19 +23,19 @@
   function clearErrors() {
     form.querySelectorAll('.form-group').forEach(function (g) {
       g.classList.remove('has-error');
-      const inp = g.querySelector('input, select');
+      var inp = g.querySelector('input, select');
       if (inp) inp.classList.remove('is-invalid');
     });
   }
 
   function showError(fieldId, msg) {
-    const input = document.getElementById(fieldId);
+    var input = document.getElementById(fieldId);
     if (!input) return;
-    const group = input.closest('.form-group');
+    var group = input.closest('.form-group');
     if (!group) return;
     input.classList.add('is-invalid');
     group.classList.add('has-error');
-    let errEl = group.querySelector('.field-error');
+    var errEl = group.querySelector('.field-error');
     if (!errEl) {
       errEl = document.createElement('span');
       errEl.className = 'field-error';
@@ -47,12 +47,12 @@
 
   function validate() {
     clearErrors();
-    let valid = true;
+    var valid = true;
 
     rules.forEach(function (rule) {
-      const el = document.getElementById(rule.id);
+      var el = document.getElementById(rule.id);
       if (!el) return;
-      const val = parseFloat(el.value);
+      var val = parseFloat(el.value);
       if (isNaN(val) || (rule.min !== null && val < rule.min) || (rule.max !== null && val > rule.max)) {
         showError(rule.id, rule.msg);
         valid = false;
@@ -72,7 +72,7 @@
     if (submitBtn) {
       submitBtn.disabled = true;
       submitBtn.classList.add('loading');
-      if (btnText) btnText.textContent = 'Predicting…';
+      if (btnText) btnText.textContent = 'Predicting\u2026';
       if (spinner) spinner.style.display = 'inline-block';
     }
   });
@@ -81,7 +81,7 @@
   form.querySelectorAll('input, select').forEach(function (el) {
     el.addEventListener('input', function () {
       el.classList.remove('is-invalid');
-      const group = el.closest('.form-group');
+      var group = el.closest('.form-group');
       if (group) group.classList.remove('has-error');
     });
   });
@@ -89,13 +89,13 @@
 
 /* ── Copy Result to Clipboard ─────────────────────────────────── */
 (function () {
-  const copyBtn = document.getElementById('copy-result-btn');
+  var copyBtn = document.getElementById('copy-result-btn');
   if (!copyBtn) return;
 
-  const feedback = document.getElementById('copy-feedback');
+  var feedback = document.getElementById('copy-feedback');
 
   copyBtn.addEventListener('click', function () {
-    const resultText = copyBtn.dataset.result || '';
+    var resultText = copyBtn.dataset.result || '';
     navigator.clipboard.writeText(resultText).then(function () {
       if (feedback) {
         feedback.classList.add('visible');
@@ -103,7 +103,7 @@
       }
     }).catch(function () {
       // Fallback for older browsers
-      const ta = document.createElement('textarea');
+      var ta = document.createElement('textarea');
       ta.value = resultText;
       ta.style.position = 'fixed';
       ta.style.opacity = '0';
@@ -115,16 +115,17 @@
   });
 })();
 
-/* ── Confidence bar animate on load ─────────────────────────── */
+/* ── Confidence bar animate on load (GPU-accelerated scaleX) ── */
 (function () {
-  const fill = document.getElementById('confidence-fill');
+  var fill = document.getElementById('confidence-fill');
   if (!fill) return;
-  const target = fill.dataset.pct || '0%';
-  // Start at 0, animate to target
-  fill.style.width = '0%';
+  var target = fill.dataset.pct || '0%';
+  var pctValue = parseFloat(target) / 100;
+  // Start at 0, animate to target via transform
+  fill.style.transform = 'scaleX(0)';
   requestAnimationFrame(function () {
     requestAnimationFrame(function () {
-      fill.style.width = target;
+      fill.style.transform = 'scaleX(' + pctValue + ')';
     });
   });
 })();
