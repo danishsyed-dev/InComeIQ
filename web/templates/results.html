@@ -83,15 +83,25 @@
 
     <!-- ── Feature Importance ────────────────────────────────── -->
     <div class="feature-panel">
-        <p class="feature-panel-title">Why this prediction?</p>
-        <p class="feature-panel-sub">Top features that influenced the model's decision.</p>
+        <h2 class="feature-panel-title">Key Decision Drivers</h2>
+        <p class="feature-panel-sub">Relative weight of features that influenced the model's prediction.</p>
 
-        {% if plot_filename %}
-        <img src="{{ url_for('static', filename=plot_filename) }}"
-            alt="Feature importance chart showing which inputs most influenced the prediction" class="feature-plot"
-            loading="lazy">
+        {% if feature_importances %}
+        <div class="feature-importance-list">
+            {% for item in feature_importances[:8] %}
+            <div class="feature-importance-row" style="--index: {{ loop.index0 }}">
+                <div class="feature-importance-info">
+                    <span class="feature-importance-label">{{ item.label }}</span>
+                    <span class="feature-importance-value">{{ (item.importance * 100) | round(1) }}%</span>
+                </div>
+                <div class="feature-importance-bar-container">
+                    <div class="feature-importance-bar-fill" style="width: {{ item.importance * 100 }}%"></div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
         {% else %}
-        <p class="feature-empty">Feature importance is not available for this model or configuration.</p>
+        <p class="feature-empty">No feature importance details available for this model.</p>
         {% endif %}
     </div>
 

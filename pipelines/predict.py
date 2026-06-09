@@ -16,10 +16,6 @@ from core.exceptions import CustomException
 from core.logging import get_logger
 from core.utils import load_object
 
-import matplotlib
-matplotlib.use('Agg') # Needed to prevent GUI errors on server
-import matplotlib.pyplot as plt
-import seaborn as sns
 import numpy as np
 import os
 
@@ -48,9 +44,9 @@ class PredictionPipeline:
             logger.info("Loading model from disk")
             self._model = load_object(str(MODEL_PATH))
 
-    def predict(self, features: pd.DataFrame) -> tuple[int, Optional[float], Optional[str]]:
+    def predict(self, features: pd.DataFrame) -> tuple[int, Optional[float], Optional[list]]:
         """
-        Transform features and return a prediction along with probability and plot path.
+        Transform features and return a prediction along with probability and feature importances.
 
         Args:
             features: DataFrame with the 12 input features.
@@ -59,7 +55,7 @@ class PredictionPipeline:
             Tuple of:
                 - Prediction result (0 = income ≤ 50K, 1 = income > 50K).
                 - Probability of the predicted class (0.0 to 1.0), or None.
-                - Filename of the generated feature importance plot, or None.
+                - List of feature importances, or None.
         """
         try:
             self._load_artifacts()
@@ -83,8 +79,8 @@ class PredictionPipeline:
                 except Exception as e:
                     logger.warning(f"Could not extract probability: {e}")
 
-            # Generate feature importance plot if model supports it
-            feature_plot_path = None
+            # Extract feature importance values if model supports it
+            feature_importances = None
             if hasattr(self._model, "feature_importances_"):
                 try:
                     importances = self._model.feature_importances_
@@ -92,45 +88,17 @@ class PredictionPipeline:
 
                     # Sort features by importance
                     indices = np.argsort(importances)[::-1]
-                    sorted_features = [feature_names[i] for i in indices]
-                    sorted_importances = importances[indices]
-
-                    # Create static dir if not exists
-                    static_dir = os.path.join("web", "static")
-                    os.makedirs(static_dir, exist_ok=True)
-                    plot_filename = "feature_importance.png"
-                    plot_path = os.path.join(static_dir, plot_filename)
-
-                    # Plot
-                    plt.figure(figsize=(8, 6), facecolor='#1e1e3f')
-                    ax = plt.axes()
-                    ax.set_facecolor('#1e1e3f')
-                    
-                    sns.barplot(
-                        x=sorted_importances[:8], # Top 8
-                        y=sorted_features[:8],
-                        palette="viridis"
-                    )
-                    
-                    plt.title("Top Predictors", color='white', pad=20)
-                    plt.xlabel("Relative Importance", color='lightgray')
-                    plt.ylabel("")
-                    plt.xticks(color='lightgray')
-                    plt.yticks(color='white')
-                    
-                    # Remove borders
-                    sns.despine(left=True, bottom=True)
-                    
-                    plt.tight_layout()
-                    plt.savefig(plot_path, bg='transparent', dpi=100)
-                    plt.close()
-                    
-                    feature_plot_path = plot_filename
+                    feature_importances = []
+                    for idx in indices:
+                        feature_importances.append({
+                            "feature": str(feature_names[idx]),
+                            "importance": float(importances[idx])
+                        })
                 except Exception as e:
-                    logger.warning(f"Could not generate feature importance plot: {e}")
+                    logger.warning(f"Could not extract feature importances: {e}")
 
             logger.info(f"Prediction result: {pred_class}, Probability: {probability}")
-            return pred_class, probability, feature_plot_path
+            return pred_class, probability, feature_importances
 
         except Exception as e:
             logger.error("Prediction failed")

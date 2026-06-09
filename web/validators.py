@@ -31,12 +31,15 @@ def validate_prediction_input(form_data: Dict) -> Tuple[Optional[Dict[str, int]]
     for field in required_fields:
         value = form_data.get(field)
 
-        if value is None or value.strip() == "":
+        if value is None:
+            return None, f"Missing required field: {field}"
+            
+        if isinstance(value, str) and value.strip() == "":
             return None, f"Missing required field: {field}"
 
         try:
             parsed[field] = int(value)
-        except ValueError:
+        except (ValueError, TypeError):
             return None, f"Invalid value for {field}: must be a number"
 
     # Range validation for key fields

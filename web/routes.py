@@ -47,7 +47,7 @@ def predict():
     features_df = user_input.to_dataframe()
 
     # Run prediction
-    result, probability, plot_filename = prediction_pipeline.predict(features_df)
+    result, probability, feature_importances = prediction_pipeline.predict(features_df)
 
     # Save to history
     try:
@@ -127,6 +127,26 @@ def predict():
     selected_model = request.form.get("model", "random_forest")
     model_label = model_name_map.get(selected_model, "Random Forest")
 
+    # Map feature names to clean labels for frontend display
+    feature_label_map = {
+        "age": "Age",
+        "workclass": "Employment Type",
+        "education_num": "Education Level",
+        "marital_status": "Marital Status",
+        "occupation": "Occupation",
+        "relationship": "Household Role",
+        "race": "Race",
+        "sex": "Sex",
+        "capital_gain": "Capital Gain",
+        "capital_loss": "Capital Loss",
+        "hours_per_week": "Hours per Week",
+        "native_country": "Country of Origin"
+    }
+
+    if feature_importances:
+        for item in feature_importances:
+            item["label"] = feature_label_map.get(item["feature"], item["feature"])
+
     input_summary = {
         "Age": parsed["age"],
         "Sex": sex_map.get(parsed["sex"], parsed["sex"]),
@@ -147,7 +167,7 @@ def predict():
         result_class=result_class,
         probability=prob_str,
         prob_pct=prob_pct,
-        plot_filename=plot_filename,
+        feature_importances=feature_importances,
         input_summary=input_summary,
         model_label=model_label,
     )

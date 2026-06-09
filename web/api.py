@@ -75,23 +75,33 @@ def predict():
         return jsonify({"error": str(e)}), 500
 
 
-@api_bp.route("/history", methods=["GET"])
-def get_history():
+@api_bp.route("/history", methods=["GET", "DELETE"])
+def history():
     """
-    Retrieve prediction history from the database.
-    Supports ?limit=N query parameter (default 10).
+    GET: Retrieve prediction history from the database. Supports ?limit=N query parameter (default 10).
+    DELETE: Clear all prediction history from the database.
     """
+    if request.method == "DELETE":
+        try:
+            db.session.query(PredictionHistory).delete()
+            db.session.commit()
+            return jsonify({"status": "success", "message": "History cleared"})
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({"error": str(e)}), 500
+
+    # GET logic
     try:
         limit = request.args.get("limit", 10, type=int)
         
-        history = PredictionHistory.query.order_by(
+        history_list = PredictionHistory.query.order_by(
             PredictionHistory.created_at.desc()
         ).limit(limit).all()
         
         return jsonify({
             "status": "success",
-            "count": len(history),
-            "data": [entry.to_dict() for entry in history]
+            "count": len(history_list),
+            "data": [entry.to_dict() for entry in history_list]
         })
         
     except Exception as e:
