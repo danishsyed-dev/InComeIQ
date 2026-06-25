@@ -22,6 +22,7 @@ logs/
 
 # Data files (downloaded via script)
 data/raw/*.csv
+data/prediction_history.db
 
 # OS
 .DS_Store
@@ -39,3 +40,6 @@ Thumbs.db
 dist/
 build/
 *.egg-info/
+
+# Project Knowledge Base
+PROJECT_KNOWLEDGE_BASE.md
